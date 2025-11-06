@@ -17,8 +17,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y r-base
-          Rscript -e "install.packages(c('remotes','arrow','dplyr','lubridate'), repos='https://cloud.r-project.org')"
-          Rscript -e "remotes::install_version('rb3', version='0.0.8', repos='https://cloud.r-project.org', upgrade='never')"
+          mkdir -p ~/.local/lib/R/site-library
+          Rscript -e "install.packages(c('remotes','arrow','dplyr','lubridate'), repos='https://cloud.r-project.org', lib=Sys.getenv('R_LIBS_USER'))"
+          Rscript -e "remotes::install_version('rb3', version='0.0.8', repos='https://cloud.r-project.org', upgrade='never', lib=Sys.getenv('R_LIBS_USER'))"
+        env:
+          R_LIBS_USER: ~/.local/lib/R/site-library
 
       - name: Configurar Python
         uses: actions/setup-python@v5
