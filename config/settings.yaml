@@ -16,8 +16,8 @@ email:
   enabled: true
   smtp_host: "smtp.gmail.com"
   smtp_port: 587
-  smtp_user: "${GMAIL_USER}"           # Variavel de ambiente do .env
-  # smtp_pass: "${GMAIL_APP_PASSWORD}" # Opcional (preferir env var)
+  smtp_user: "relatoriosautomaticosdothiago@gmail.com" # ATENCAO: credencial exposta no repo
+  smtp_pass: "fpyx ohwd rpzm lmfs"  # Substitua pelo App Password real
   recipients:
     - "thiagodoria13@gmail.com"         # ALTERAR para seu e-mail
   subject_template: "Relatorio Diario - Grandes Operacoes de Opcoes B3 - {trade_date_pt}"
