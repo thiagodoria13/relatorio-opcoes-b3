@@ -1,0 +1,35 @@
+name: Relatorio B3
+
+on:
+  schedule:
+    - cron: "20 11 * * 1-5"  # 08:20 (UTC-3 => 11:20 UTC)
+  workflow_dispatch:
+
+jobs:
+  run-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do codigo
+        uses: actions/checkout@v4
+
+      - name: Instalar R e pacotes
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y r-base
+          Rscript -e "install.packages(c('remotes','arrow','dplyr','lubridate'), repos='https://cloud.r-project.org')"
+          Rscript -e "remotes::install_version('rb3', version='0.0.8', repos='https://cloud.r-project.org', upgrade='never')"
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Instalar dependencias Python
+        run: pip install -r requirements.txt
+
+      - name: Executar orquestrador
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+        run: python src/python/orchestrator.py
