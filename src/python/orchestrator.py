@@ -20,6 +20,7 @@ import time
 import os
 import re
 import argparse
+import shutil
 from pathlib import Path
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
@@ -286,7 +287,34 @@ def run_r_download(trade_date_str: str, config: dict, force: bool = False,
         retry_interval = 1
 
     # Path do Rscript (configuravel ou usa PATH do sistema)
-    rscript_cmd = config.get('paths', {}).get('rscript', 'Rscript')
+    configured_rscript = config.get('paths', {}).get('rscript')
+    default_rscript = shutil.which('Rscript') or 'Rscript'
+
+    if configured_rscript:
+        # Se estivermos rodando em ambiente nao-Windows e o caminho parecer Windows, faz fallback
+        if os.name != 'nt' and '\\' in configured_rscript:
+            logger.warning(
+                "Caminho Rscript configurado parece Windows, mas estamos fora do Windows. "
+                "Usando Rscript do PATH."
+            )
+            rscript_cmd = default_rscript
+        else:
+            # Se caminho absoluto nao existir, tenta usar Rscript do PATH
+            candidate_path = Path(configured_rscript)
+            if candidate_path.is_absolute() and not candidate_path.exists():
+                fallback = shutil.which('Rscript')
+                if fallback:
+                    logger.warning(
+                        "Caminho Rscript configurado nao encontrado. "
+                        "Usando Rscript encontrado no PATH."
+                    )
+                    rscript_cmd = fallback
+                else:
+                    rscript_cmd = configured_rscript
+            else:
+                rscript_cmd = configured_rscript
+    else:
+        rscript_cmd = default_rscript
 
     logger.info(f"Comando Rscript: {rscript_cmd}")
 
