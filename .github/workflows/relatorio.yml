@@ -8,20 +8,29 @@ on:
 jobs:
   run-report:
     runs-on: ubuntu-latest
+    env:
+      R_LIBS_USER: ~/.local/lib/R/site-library
 
     steps:
       - name: Checkout do codigo
         uses: actions/checkout@v4
 
-      - name: Instalar R e pacotes
+      - name: Dependencias de sistema
         run: |
           sudo apt-get update
-          sudo apt-get install -y r-base
-          mkdir -p ~/.local/lib/R/site-library
-          Rscript -e "install.packages(c('remotes','arrow','dplyr','lubridate'), repos='https://cloud.r-project.org', lib=Sys.getenv('R_LIBS_USER'))"
-          Rscript -e "remotes::install_version('rb3', version='0.0.8', repos='https://cloud.r-project.org', upgrade='never', lib=Sys.getenv('R_LIBS_USER'))"
-        env:
-          R_LIBS_USER: ~/.local/lib/R/site-library
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev
+
+      - name: Configurar R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - name: Instalar pacotes R
+        run: |
+          mkdir -p "$R_LIBS_USER"
+          Rscript -e ".libPaths(Sys.getenv('R_LIBS_USER')); if (!'pak' %in% rownames(installed.packages(lib.loc=Sys.getenv('R_LIBS_USER')))) install.packages('pak', repos='https://cloud.r-project.org', lib=Sys.getenv('R_LIBS_USER'))"
+          Rscript -e ".libPaths(Sys.getenv('R_LIBS_USER')); Sys.setenv(PAK_PKGTYPE='binary'); pak::pkg_install(c('dplyr','lubridate','arrow','rb3@0.0.8'), lib = Sys.getenv('R_LIBS_USER'), ask = FALSE)"
+          Rscript -e ".libPaths(Sys.getenv('R_LIBS_USER')); library(arrow); arrow::install_arrow()"
 
       - name: Configurar Python
         uses: actions/setup-python@v5
