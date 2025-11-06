@@ -1,0 +1,35 @@
+# Configuracao do Sistema de Relatorios de Opcoes B3
+# Use ${VAR} ou $VAR para expandir variaveis de ambiente do .env
+
+filters:
+  max_operations: 5              # Maximo de operacoes para considerar "boleta grande"
+  min_financial_volume: 100000   # Volume minimo em R$ (100k)
+  top_n: 20                      # Quantas operacoes listar no relatorio
+
+scheduling:
+  target_time: "08:00"           # Horario de execucao (recomendado: 08:20-08:30)
+  timezone: "America/Sao_Paulo"  # Fuso horario do Brasil
+  retries: 6                     # Tentativas de download se B3 atrasar
+  retry_interval_minutes: 10     # Intervalo entre tentativas (backoff aplicado)
+
+email:
+  enabled: true
+  smtp_host: "smtp.gmail.com"
+  smtp_port: 587
+  smtp_user: "${GMAIL_USER}"           # Variavel de ambiente do .env
+  # smtp_pass: "${GMAIL_APP_PASSWORD}" # Opcional (preferir env var)
+  recipients:
+    - "thiagodoria13@gmail.com"         # ALTERAR para seu e-mail
+  subject_template: "Relatorio Diario - Grandes Operacoes de Opcoes B3 - {trade_date_pt}"
+  send_failure_alerts: true            # Enviar e-mail se execucao falhar
+
+paths:
+  processed_dir: "data/processed"
+  reports_dir: "output/reports"
+  logs_dir: "logs"
+  rscript: "C:\\Users\\Thiago Doria\\AppData\\Local\\Programs\\R\\R-4.5.2\\bin\\Rscript.exe"
+
+# MCP (opcional - nao usado no MVP, mas pode ser habilitado futuramente)
+mcp:
+  enabled: false
+  fetch_server: "@modelcontextprotocol/server-fetch"

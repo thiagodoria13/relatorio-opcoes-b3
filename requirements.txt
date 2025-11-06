@@ -1,0 +1,35 @@
+# ==============================================================================
+# Dependências Python - Sistema de Relatórios B3 Opções
+# ==============================================================================
+#
+# Instalação:
+#   pip install -r requirements.txt
+#
+# Recomendação: Usar ambiente virtual (venv)
+#   python -m venv venv
+#   venv\Scripts\activate    (Windows)
+#   source venv/bin/activate (Linux/Mac)
+#   pip install -r requirements.txt
+#
+# ==============================================================================
+
+# ===== Core Data Processing =====
+pandas==2.1.4
+pyarrow==14.0.2           # Leitura de Parquet (compatível com Arrow do R)
+numpy==1.26.3
+
+# ===== Plotting e PDF =====
+matplotlib==3.8.2
+
+# ===== Configuração e I/O =====
+pyyaml==6.0.1
+python-dotenv==1.0.0
+
+# ===== Calendários e Datas =====
+holidays==0.38            # Feriados nacionais brasileiros
+
+# ===== Internacionalização (Formatação pt-BR) =====
+babel==2.14.0             # Formatação monetária e numérica pt-BR (opcional mas recomendado)
+
+# ===== Utilitários =====
+# Nota: smtplib, ssl, logging são built-in do Python (não precisam instalação)

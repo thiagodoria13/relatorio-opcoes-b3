@@ -1,0 +1,23 @@
+# Feriados específicos da B3 que não estão no calendário nacional padrão
+# Fonte: https://www.b3.com.br/pt_br/solucoes/plataformas/puma-trading-system/para-participantes-e-traders/calendario-de-negociacao/feriados/
+
+# IMPORTANTE: Atualizar anualmente com o calendário oficial da B3
+
+b3_specific_holidays:
+  # 2024
+  - '2024-11-20'  # Dia da Consciência Negra (feriado estadual SP - B3 fecha)
+
+  # 2025
+  - '2025-02-04'  # Carnaval (opcional - B3 decide anualmente)
+  - '2025-11-20'  # Dia da Consciência Negra (feriado estadual SP - B3 fecha)
+
+  # 2026
+  - '2026-02-17'  # Carnaval (opcional - B3 decide anualmente)
+  - '2026-11-20'  # Dia da Consciência Negra (feriado estadual SP - B3 fecha)
+
+# Notas:
+# - Feriados nacionais já são capturados por holidays.Brazil()
+# - Alguns feriados municipais/estaduais de SP afetam a B3
+# - Carnaval: normalmente B3 fecha ou opera meio-período (verificar calendário anual)
+# - Corpus Christi: B3 decide anualmente (geralmente fecha)
+# - Verifique calendário oficial: https://www.b3.com.br/pt_br/solucoes/plataformas/puma-trading-system/para-participantes-e-traders/calendario-de-negociacao/feriados/
